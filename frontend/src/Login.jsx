@@ -1,46 +1,27 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({ onLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/api/user/login", { email, password });
-      if (response.data.success) {
-        window.location.href = "/game";
-      } else {
-        alert("Login failed!");
-      }
-    } catch (error) {
-      console.error("Login error", error);
-    }
+    onLogin({ username, password });
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
-        <h1 className="text-xl mb-4">Login</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 p-2 border"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-4 p-2 border"
-        />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2">Login</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Username</label>
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </div>
+      <button type="submit">Login</button>
+    </form>
   );
 };
 
-export default Login;
+export default LoginForm;
