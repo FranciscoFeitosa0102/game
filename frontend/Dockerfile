@@ -1,18 +1,21 @@
-# Set the base image
-FROM node:14
+# # Usar uma imagem oficial do Node.js
+FROM node:16
 
-# Set working directory
-WORKDIR /app
+# Diretório de trabalho
+WORKDIR /usr/src/app
 
-# Install dependencies
-COPY package.json package-lock.json ./
+# Copiar os arquivos package.json e package-lock.json
+COPY package*.json ./
+
+# Instalar as dependências
 RUN npm install
 
-# Copy the rest of the application
+# Copiar todos os arquivos para dentro do contêiner
 COPY . .
 
-# Expose the port
-EXPOSE 3000
+# Construir o projeto React
+RUN npm run build
 
-# Run the application
-CMD ["npm", "start"]
+# Servir o conteúdo da pasta build
+RUN npm install -g serve
+CMD ["serve", "-s", "build", "-l", "80"]
