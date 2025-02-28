@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /usr/src/app
 
 # Copiar o package.json e o package-lock.json da raiz do projeto
-COPY ../package*.json ./
+COPY package*.json ./
 
 # Instalar dependências
 RUN npm install
