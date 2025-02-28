@@ -1,10 +1,8 @@
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const SaleSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  salesCount: { type: Number, required: true },
+  userId: mongoose.Schema.Types.ObjectId,
+  amount: Number,
 });
 
-module.exports = mongoose.model('Sale', SaleSchema);
-    
+module.exports = mongoose.model("Sale", SaleSchema);
