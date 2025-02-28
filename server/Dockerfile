@@ -4,8 +4,8 @@ FROM node:14
 # Definir o diretório de trabalho
 WORKDIR /usr/src/app
 
-# Copiar o package.json e o package-lock.json
-COPY package*.json ./
+# Copiar o package.json e o package-lock.json da raiz do projeto
+COPY ../package*.json ./
 
 # Instalar dependências
 RUN npm install
