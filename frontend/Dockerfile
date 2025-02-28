@@ -1,21 +1,23 @@
-# # Usar uma imagem oficial do Node.js
-FROM node:16
+# Usando uma imagem oficial do Node.js
+FROM node:14
 
-# Diretório de trabalho
+# Definir o diretório de trabalho
 WORKDIR /usr/src/app
 
-# Copiar os arquivos package.json e package-lock.json
+# Copiar o package.json e o package-lock.json
 COPY package*.json ./
 
-# Instalar as dependências
+# Instalar dependências
 RUN npm install
 
-# Copiar todos os arquivos para dentro do contêiner
+# Copiar os arquivos restantes
 COPY . .
 
 # Construir o projeto React
 RUN npm run build
 
-# Servir o conteúdo da pasta build
-RUN npm install -g serve
-CMD ["serve", "-s", "build", "-l", "80"]
+# Expor a porta para o frontend
+EXPOSE 80
+
+# Comando para iniciar o servidor
+CMD ["npm", "start"]
