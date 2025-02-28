@@ -1,19 +1,19 @@
-# Usar uma imagem oficial do Node.js
-FROM node:16
+# Usando uma imagem oficial do Node.js
+FROM node:14
 
-# Diretório de trabalho
+# Definir o diretório de trabalho
 WORKDIR /usr/src/app
 
-# Copiar os arquivos package.json e package-lock.json
+# Copiar o package.json e o package-lock.json
 COPY package*.json ./
 
-# Instalar as dependências
+# Instalar dependências
 RUN npm install
 
-# Copiar todos os arquivos para dentro do contêiner
+# Copiar os arquivos restantes
 COPY . .
 
-# Expor a porta onde o backend vai rodar
+# Expor a porta para o backend
 EXPOSE 5000
 
 # Comando para iniciar o servidor
