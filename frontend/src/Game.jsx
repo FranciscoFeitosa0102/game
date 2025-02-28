@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 
-const Game = () => {
+const GamePage = ({ sales }) => {
+  const [timeRemaining, setTimeRemaining] = useState(sales * 5 * 60); // 5 minutes per sale
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timeRemaining > 0) {
+        setTimeRemaining(timeRemaining - 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeRemaining]);
+
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-xl mb-4">Game</h1>
-        <p>Game content goes here</p>
-      </div>
+    <div>
+      <h1>Game Page</h1>
+      <div>Time Remaining: {Math.floor(timeRemaining / 60)}:{timeRemaining % 60}</div>
+      <button onClick={() => setTimeRemaining(sales * 5 * 60)}>Start Game</button>
     </div>
   );
 };
 
-export default Game;
+export default GamePage;
+
