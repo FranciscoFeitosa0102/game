@@ -1,11 +1,11 @@
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const RankingSchema = new mongoose.Schema({
-  email: String,
-  score: Number,
+const rankingSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  points: { type: Number, default: 0 }
 });
 
-module.exports = mongoose.model("Ranking", RankingSchema);
+module.exports = mongoose.model('Ranking', rankingSchema);
 
     
