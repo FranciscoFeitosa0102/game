@@ -1,46 +1,28 @@
 import React, { useState } from "react";
-import axios from "axios";
+imporimport React, { useState } from 'react';
 
-const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const RegisterForm = ({ onRegisterSales }) => {
+  const [sales, setSales] = useState(0);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/api/user/register", { email, password });
-      if (response.data.success) {
-        window.location.href = "/";
-      } else {
-        alert("Registration failed!");
-      }
-    } catch (error) {
-      console.error("Registration error", error);
-    }
+    onRegisterSales(sales);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
-        <h1 className="text-xl mb-4">Register</h1>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Number of Sales</label>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 p-2 border"
+          type="number"
+          value={sales}
+          onChange={(e) => setSales(Number(e.target.value))}
+          min="0"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-4 p-2 border"
-        />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2">Register</button>
-      </form>
-    </div>
+      </div>
+      <button type="submit">Register Sales</button>
+    </form>
   );
 };
 
-export default Register;
+export default RegisterForm;
