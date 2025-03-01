@@ -12,7 +12,7 @@ function SalesPage({ user }) {
     }
 
     try {
-      await axios.post('/api/sales', { userId: user._id, salesCount });
+      await axios.post('/api/sales', { userId: user._id, amount: salesCount });
       localStorage.setItem('user', JSON.stringify({ ...user, salesCount }));
       setError("");
       alert("Vendas registradas com sucesso!");
