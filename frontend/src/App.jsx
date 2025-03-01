@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import GamePage from './pages/GamePage';
@@ -50,19 +49,19 @@ function App() {
             </li>
           </ul>
         </nav>
-        <Switch>
-          <Route path="/login" render={() => <LoginPage onLogin={handleLogin} />} />
-          <Route path="/register" component={RegisterPage} />
-          <Route path="/game" render={() => <GamePage user={user} />} />
-          <Route path="/sales" render={() => <SalesPage user={user} />} />
-          <Route path="/ranking" component={RankingPage} />
-          <Route path="/" exact>
-            <h1>Bem-vindo ao Jogo</h1>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/game" element={<GamePage user={user} />} />
+          <Route path="/sales" element={<SalesPage user={user} />} />
+          <Route path="/ranking" element={<RankingPage />} />
+          <Route path="/" element={<h1>Bem-vindo ao Jogo</h1>} />
+        </Routes>
       </div>
     </Router>
   );
 }
 
 export default App;
+
+
