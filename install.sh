@@ -5,45 +5,55 @@ echo "Iniciando instalação..."
 # Atualizar o sistema
 sudo apt update && sudo apt upgrade -y
 
-# Instalar MongoDB
-echo "Instalando o MongoDB..."
-sudo apt install -y mongodb-server-core
+# Instalar dependências básicas
+sudo apt install -y curl git nginx
 
-# Verificar se o MongoDB foi instalado corretamente
-if ! command -v mongod &> /dev/null
-then
-    echo "Erro ao instalar o MongoDB. Por favor, verifique."
+# Instalar MongoDB corretamente
+echo "Instalando MongoDB..."
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt update
+sudo apt install -y mongodb-org
+
+# Iniciar MongoDB
+sudo systemctl enable mongod
+sudo systemctl start mongod
+
+# Verificar se MongoDB está rodando
+if ! systemctl is-active --quiet mongod; then
+    echo "Erro ao iniciar o MongoDB. Saindo..."
     exit 1
 fi
 
-# Iniciar o MongoDB
-echo "Iniciando MongoDB..."
-sudo systemctl enable mongodb
-sudo systemctl start mongodb
+# Instalar Node.js e npm via NVM
+echo "Instalando Node.js..."
+curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+source "$NVM_DIR/nvm.sh"
+nvm install 18
+nvm use 18
 
-# Verificar o status do MongoDB
-echo "Verificando o status do MongoDB..."
-sudo systemctl status mongodb
-
-# Instalar Node.js e npm
-echo "Instalando Node.js e npm..."
-sudo apt install -y nodejs npm
+# Instalar PM2 para gerenciar processos Node.js
+npm install -g pm2
 
 # Clonar o repositório do projeto
 echo "Clonando o repositório..."
-cd /var/www/
-git clone https://github.com/FranciscoFeitosa0102/game.git gamifica_complete_project
-cd gamifica_complete_project
+sudo mkdir -p /var/www/gamifica_complete_project
+sudo chown $USER:$USER /var/www/gamifica_complete_project
+git clone https://github.com/FranciscoFeitosa0102/game.git /var/www/gamifica_complete_project
+cd /var/www/gamifica_complete_project
 
-# Instalar dependências do projeto (NPM)
+# Instalar dependências do projeto
 echo "Instalando dependências do Node.js..."
 npm install
 
-# Instalar Nginx para configurar o Reverse Proxy
-echo "Instalando o Nginx..."
-sudo apt install -y nginx
+# Iniciar o projeto com PM2 para rodar na porta 3000
+echo "Iniciando o projeto com PM2..."
+pm2 start npm --name "gamifica" -- start
+pm2 save
+pm2 startup systemd
 
-# Configurar o Nginx para o projeto
+# Configurar o Nginx para proxy reverso na porta 3000
 echo "Configurando Nginx..."
 
 cat <<EOF | sudo tee /etc/nginx/sites-available/gamifica
@@ -52,7 +62,7 @@ server {
     server_name gamifica.leadscdt.com.br;
 
     location / {
-        proxy_pass http://localhost:3000; # Porta onde o seu backend vai rodar
+        proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -62,21 +72,11 @@ server {
 }
 EOF
 
-# Habilitar a configuração do Nginx
-sudo ln -s /etc/nginx/sites-available/gamifica /etc/nginx/sites-enabled/
+# Habilitar a configuração no Nginx
+sudo ln -sf /etc/nginx/sites-available/gamifica /etc/nginx/sites-enabled/
 
-# Testar a configuração do Nginx
-echo "Testando a configuração do Nginx..."
-sudo nginx -t
-
-# Reiniciar o Nginx
-echo "Reiniciando o Nginx..."
-sudo systemctl restart nginx
-
-# Iniciar o projeto
-echo "Iniciando o projeto..."
-npm start
+# Testar configuração e reiniciar Nginx
+sudo nginx -t && sudo systemctl reload nginx
 
 # Informar ao usuário
-echo "Instalação concluída! O projeto está rodando em http://gamifica.leadscdt.com.br"
-
+echo "Instalação concluída! Acesse http://gamifica.leadscdt.com.br"
