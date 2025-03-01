@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 80
 
 # Comando para iniciar o servidor
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build", "-l", "80"]
