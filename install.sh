@@ -53,6 +53,36 @@ pm2 start npm --name "gamifica" -- start
 pm2 save
 pm2 startup systemd
 
+# Instalar Docker e Docker Compose
+echo "Instalando Docker e Docker Compose..."
+
+# Instalar dependências do Docker
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Adicionar chave oficial do Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Adicionar repositório do Docker
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Atualizar novamente os pacotes
+sudo apt-get update -y
+
+# Instalar Docker
+sudo apt-get install -y docker-ce
+
+# Instalar Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Verificar a instalação do Docker Compose
+docker-compose --version
+
+# Configurar e iniciar containers com Docker Compose
+echo "Iniciando containers com Docker Compose..."
+cd /var/www/gamifica_complete_project
+sudo docker-compose up --build -d
+
 # Configurar o Nginx para proxy reverso na porta 3000
 echo "Configurando Nginx..."
 
@@ -80,4 +110,5 @@ sudo nginx -t && sudo systemctl reload nginx
 
 # Informar ao usuário
 echo "Instalação concluída! Acesse http://gamifica.leadscdt.com.br"
+
 
