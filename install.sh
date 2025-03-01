@@ -80,3 +80,4 @@ sudo nginx -t && sudo systemctl reload nginx
 
 # Informar ao usuário
 echo "Instalação concluída! Acesse http://gamifica.leadscdt.com.br"
+
