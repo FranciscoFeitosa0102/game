@@ -1,7 +1,57 @@
 /* src/index.css */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+
+/* Resetando o estilo para uma aparência mais consistente em todos os navegadores */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/* Definindo a cor de fundo e a cor do texto */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;  /* Cor de fundo clara */
+  color: #333;  /* Cor de texto escura */
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilizando links para dar um destaque */
+a {
+  color: #007bff;  /* Cor azul para links */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;  /* Sobrescreve a decoração do link ao passar o mouse */
+}
+
+/* Estilos gerais para o cabeçalho de navegação */
+nav {
+  background-color: #333;  /* Cor de fundo do cabeçalho */
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+}
+
+nav li {
+  margin-right: 20px;
+}
+
+nav a {
+  color: #fff;
+  font-size: 1rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos gerais para o conteúdo principal */
+.App {
+  padding: 20px;
 }
